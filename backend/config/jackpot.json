@@ -1,0 +1,7 @@
+{
+  "contributionPct": 0.02,
+  "trigger": {
+    "scatterCount": 5,
+    "randomChance": 0.001
+  }
+}
