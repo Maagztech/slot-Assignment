@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useAuth } from "@/context/AuthContext";
+import { errorMessage } from "@/lib/api";
 
 export default function SignIn() {
     const { login, signup } = useAuth();
@@ -31,8 +32,8 @@ export default function SignIn() {
             } else {
                 await login(account, password);
             }
-        } catch (err: any) {
-            setError(err.message || "Authentication failed");
+        } catch (err: unknown) {
+            setError(errorMessage(err) || "Authentication failed");
         } finally {
             setLoading(false);
         }

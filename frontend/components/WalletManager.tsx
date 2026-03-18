@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import * as api from "@/lib/api";
+import { errorMessage } from "@/lib/api";
 
 interface WalletManagerProps {
     token: string;
@@ -36,8 +37,8 @@ export default function WalletManager({
             setSuccess(true);
 
             setTimeout(() => setSuccess(false), 3000);
-        } catch (err: any) {
-            setError(err.message || "Failed to add funds");
+        } catch (err: unknown) {
+            setError(errorMessage(err) || "Failed to add funds");
         } finally {
             setLoading(false);
         }

@@ -1,37 +1,85 @@
-import mongoose, { Document, Schema, Model, Types } from "mongoose";
+import { createId, readStore, StoredUser, writeStore } from "../data/store";
 
-export interface IUser extends Document {
-  _id: Types.ObjectId;
-  account: string;
-  password: string;
-  wallet_balance: number;
-}
+export interface IUser extends StoredUser {}
 
-const userSchema: Schema<IUser> = new mongoose.Schema(
-  {
-    account: {
-      type: String,
-      required: [true, "Please add email or phone"],
-      trim: true,
-      unique: true,
-    },
+const Users = {
+  async findOne(query: Partial<Pick<IUser, "account" | "_id">>): Promise<IUser | null> {
+    const data = readStore();
 
-    password: {
-      type: String,
-      required: [true, "Please add a password"],
-      minlength: 6,
-    },
+    const user = data.users.find((candidate) => {
+      if (query.account !== undefined && candidate.account !== query.account) {
+        return false;
+      }
+      if (query._id !== undefined && candidate._id !== query._id) {
+        return false;
+      }
+      return true;
+    });
 
-    wallet_balance: {
-      type: Number,
-      default: 0,
-    },
+    return user ?? null;
   },
-  {
-    timestamps: true,
+
+  async findById(id: string): Promise<IUser | null> {
+    const data = readStore();
+    return data.users.find((user) => user._id === id) ?? null;
   },
-);
 
-const User: Model<IUser> = mongoose.model<IUser>("User", userSchema);
+  async create(payload: Pick<IUser, "account" | "password" | "wallet_balance">): Promise<IUser> {
+    const data = readStore();
+    const now = new Date().toISOString();
 
-export default User;
+    const user: IUser = {
+      _id: createId("user"),
+      account: payload.account,
+      password: payload.password,
+      wallet_balance: payload.wallet_balance ?? 0,
+      createdAt: now,
+      updatedAt: now,
+    };
+
+    data.users.push(user);
+    writeStore(data);
+
+    return user;
+  },
+
+  async findByIdAndUpdate(
+    id: string,
+    update: { $inc?: { wallet_balance?: number } },
+    options?: { new?: boolean },
+  ): Promise<IUser | null> {
+    const data = readStore();
+    const user = data.users.find((candidate) => candidate._id === id);
+
+    if (!user) {
+      return null;
+    }
+
+    user.wallet_balance += update.$inc?.wallet_balance ?? 0;
+    user.updatedAt = new Date().toISOString();
+    writeStore(data);
+
+    return options?.new ? user : null;
+  },
+
+  async updateOne(
+    query: Partial<Pick<IUser, "_id">>,
+    update: { $inc?: { wallet_balance?: number } },
+  ): Promise<void> {
+    if (!query._id) {
+      return;
+    }
+
+    const data = readStore();
+    const user = data.users.find((candidate) => candidate._id === query._id);
+    if (!user) {
+      return;
+    }
+
+    user.wallet_balance += update.$inc?.wallet_balance ?? 0;
+    user.updatedAt = new Date().toISOString();
+    writeStore(data);
+  },
+};
+
+export default Users;

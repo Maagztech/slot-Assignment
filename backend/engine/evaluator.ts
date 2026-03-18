@@ -5,6 +5,7 @@ export interface LineWin {
   symbol: string;
   count: number;
   win: number;
+  positions: Array<{ row: number; col: number }>;
 }
 
 export interface EvaluationResult {
@@ -18,46 +19,59 @@ export function evaluate(grid: string[][], bet: number): EvaluationResult {
   const wild = reelConfig.wild;
   const scatter = reelConfig.scatter;
 
-  // Count scatter symbols anywhere on grid
-  const scatterCount = grid.flat().filter((s) => s === scatter).length;
-  const bonusTriggered = scatterCount >= 3; // Bonus triggers on 3+ scatters
+  const scatterCount = grid.flat().filter((symbol) => symbol === scatter).length;
+  const bonusTriggered = scatterCount >= 3;
 
   const lineWins: LineWin[] = [];
   let totalWin = 0;
 
   for (let lineIndex = 0; lineIndex < paylines.length; lineIndex++) {
     const line = paylines[lineIndex];
-
-    // Collect symbols for this payline (left-to-right)
     const symbols = line.map((row, col) => grid[row][col]);
+    const positions = line.map((row, col) => ({ row, col }));
 
-    // Determine base symbol for this line (first non-wild, non-scatter)
-    const firstNonWild = symbols.find((s) => s !== wild && s !== scatter);
-    const baseSymbol = firstNonWild || symbols[0];
+    const firstPayingSymbol = symbols.find(
+      (symbol) => symbol !== wild && symbol !== scatter,
+    );
+    const baseSymbol = firstPayingSymbol ?? symbols[0];
+
+    if (!baseSymbol || baseSymbol === scatter) {
+      continue;
+    }
 
     let count = 0;
-    for (let i = 0; i < symbols.length; i++) {
-      const symbol = symbols[i];
-      if (symbol === scatter) {
-        break; // Scatter does not participate in paylines
-      }
-
-      if (symbol === baseSymbol || symbol === wild) {
-        count++;
-      } else {
+    for (let col = 0; col < symbols.length; col++) {
+      const currentSymbol = symbols[col];
+      if (currentSymbol === scatter) {
         break;
       }
+
+      if (currentSymbol === baseSymbol || currentSymbol === wild) {
+        count += 1;
+        continue;
+      }
+
+      break;
     }
 
-    if (count >= 3) {
-      const payouts = paytableConfig[baseSymbol];
-      const multiplier = payouts?.[count as 3 | 4 | 5] ?? 0;
-      const win = bet * multiplier;
-      if (win > 0) {
-        totalWin += win;
-        lineWins.push({ lineIndex, symbol: baseSymbol, count, win });
-      }
+    if (count < 3) {
+      continue;
     }
+
+    const multiplier = paytableConfig[baseSymbol]?.[count as 3 | 4 | 5] ?? 0;
+    const win = bet * multiplier;
+    if (win <= 0) {
+      continue;
+    }
+
+    totalWin += win;
+    lineWins.push({
+      lineIndex,
+      symbol: baseSymbol,
+      count,
+      win,
+      positions: positions.slice(0, count),
+    });
   }
 
   return {

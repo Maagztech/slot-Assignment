@@ -1,31 +1,45 @@
-import mongoose, { Document, Schema, Model, Types } from "mongoose";
+import { readStore, StoredJackpot, writeStore } from "../data/store";
 
-export interface IJackpot extends Document {
-  _id: Types.ObjectId;
-  value: number;
-  id: string;
-}
+export interface IJackpot extends StoredJackpot {}
 
-const jackpotSchema: Schema<IJackpot> = new mongoose.Schema(
-  {
-    value: {
-      type: Number,
-      default: 0,
-    },
-    id: {
-      type: String,
-      default: "main",
-      unique: true,
-    },
+const Jackpots = {
+  async findOne(query: Partial<Pick<IJackpot, "id">>): Promise<IJackpot | null> {
+    const data = readStore();
+    return data.jackpots.find((jackpot) => jackpot.id === query.id) ?? null;
   },
-  {
-    timestamps: true,
+
+  async create(payload: Pick<IJackpot, "id" | "value">): Promise<IJackpot> {
+    const data = readStore();
+    const now = new Date().toISOString();
+    const jackpot: IJackpot = {
+      id: payload.id,
+      value: payload.value,
+      createdAt: now,
+      updatedAt: now,
+    };
+
+    data.jackpots.push(jackpot);
+    writeStore(data);
+    return jackpot;
   },
-);
 
-const Jackpot: Model<IJackpot> = mongoose.model<IJackpot>(
-  "Jackpot",
-  jackpotSchema,
-);
+  async save(jackpot: IJackpot): Promise<IJackpot> {
+    const data = readStore();
+    const existing = data.jackpots.find((candidate) => candidate.id === jackpot.id);
+    if (existing) {
+      existing.value = jackpot.value;
+      existing.updatedAt = new Date().toISOString();
+    } else {
+      data.jackpots.push({
+        ...jackpot,
+        createdAt: jackpot.createdAt ?? new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
+      });
+    }
 
-export default Jackpot;
+    writeStore(data);
+    return jackpot;
+  },
+};
+
+export default Jackpots;

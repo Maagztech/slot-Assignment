@@ -9,9 +9,11 @@ export interface JackpotUpdateResult {
 
 async function getOrCreateJackpot() {
   const existing = await Jackpots.findOne({ id: "main" });
-  if (existing) return existing;
+  if (existing) {
+    return existing;
+  }
 
-  return await Jackpots.create({ id: "main", value: 0 });
+  return Jackpots.create({ id: "main", value: 0 });
 }
 
 export async function getCurrentJackpotMeter(): Promise<number> {
@@ -38,7 +40,7 @@ export async function updateJackpot(
     jackpotDoc.value = 0;
   }
 
-  await jackpotDoc.save();
+  await Jackpots.save(jackpotDoc);
 
   return {
     jackpotMeter: jackpotDoc.value,

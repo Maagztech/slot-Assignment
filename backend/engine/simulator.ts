@@ -1,19 +1,23 @@
-import { generateGrid } from "./reels";
 import { evaluate } from "./evaluator";
 import { getCurrentJackpotMeter, simulateJackpot } from "./jackpot";
+import { generateGrid } from "./reels";
 
 export interface SimulationReport {
   spins: number;
   bet: number;
   totalWagered: number;
   totalReturned: number;
-  rtp: number; // return to player
-  hitFrequency: number; // winning spin frequency
-  bonusFrequency: number; // bonus trigger frequency
+  rtp: number;
+  averageWin: number;
+  winningSpins: number;
+  hitFrequency: number;
+  bonusSpins: number;
+  bonusFrequency: number;
   jackpotTriggers: number;
   maxWinObserved: number;
   startingJackpot: number;
   endingJackpot: number;
+  jackpotContributionGrowth: number;
   totalJackpotContributed: number;
   totalJackpotPaidOut: number;
 }
@@ -33,17 +37,16 @@ export async function runSimulation(
   let totalJackpotContributed = 0;
   let totalJackpotPaidOut = 0;
 
-  for (let i = 0; i < spins; i++) {
+  for (let index = 0; index < spins; index++) {
     const grid = generateGrid();
     const evaluation = evaluate(grid, bet);
-
     const jackpotResult = simulateJackpot(
       bet,
       evaluation.scatterCount,
       currentJackpot,
     );
-    currentJackpot = jackpotResult.meter;
 
+    currentJackpot = jackpotResult.meter;
     totalJackpotContributed += jackpotResult.contribution;
 
     const rawWin = evaluation.totalWin + jackpotResult.jackpotWin;
@@ -60,27 +63,29 @@ export async function runSimulation(
       jackpotTriggers += 1;
       totalJackpotPaidOut += jackpotResult.jackpotWin;
     }
-
     if (cappedWin > maxWinObserved) {
       maxWinObserved = cappedWin;
     }
   }
 
   const totalWagered = bet * spins;
-  const rtp = totalWagered > 0 ? totalReturned / totalWagered : 0;
 
   return {
     spins,
     bet,
     totalWagered,
     totalReturned,
-    rtp,
+    rtp: totalWagered > 0 ? totalReturned / totalWagered : 0,
+    averageWin: spins > 0 ? totalReturned / spins : 0,
+    winningSpins,
     hitFrequency: spins > 0 ? winningSpins / spins : 0,
+    bonusSpins,
     bonusFrequency: spins > 0 ? bonusSpins / spins : 0,
     jackpotTriggers,
     maxWinObserved,
     startingJackpot,
     endingJackpot: currentJackpot,
+    jackpotContributionGrowth: currentJackpot - startingJackpot,
     totalJackpotContributed,
     totalJackpotPaidOut,
   };
