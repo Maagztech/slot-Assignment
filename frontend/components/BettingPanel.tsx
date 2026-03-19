@@ -23,17 +23,17 @@ export default function BettingPanel({
     };
 
     return (
-        <div className="bg-gradient-to-br from-yellow-900/30 to-orange-900/30 backdrop-blur-md rounded-2xl p-6 border-2 border-yellow-500/50 shadow-2xl">
-            <h3 className="text-2xl font-bold text-white mb-6 text-center">💰 Bet Panel</h3>
+        <div className="bg-gradient-to-br from-yellow-900/30 to-orange-900/30 backdrop-blur-md rounded-2xl p-4 sm:p-6 border-2 border-yellow-500/50 shadow-2xl">
+            <h3 className="text-xl sm:text-2xl font-bold text-white mb-4 sm:mb-6 text-center">💰 Bet Panel</h3>
 
             {/* Bet Amount Input */}
-            <div className="space-y-4 mb-6">
+            <div className="space-y-3 sm:space-y-4 mb-4 sm:mb-6">
                 <div>
-                    <label className="block text-yellow-300 font-semibold mb-2">
+                    <label className="block text-yellow-300 font-semibold mb-2 text-sm sm:text-base">
                         Bet Amount
                     </label>
                     <div className="flex items-center gap-2">
-                        <span className="text-2xl text-yellow-400">$</span>
+                        <span className="text-xl sm:text-2xl text-yellow-400">$</span>
                         <input
                             type="number"
                             value={betAmount}
@@ -41,25 +41,25 @@ export default function BettingPanel({
                             max={maxBet}
                             min="1"
                             step="1"
-                            className="flex-1 px-4 py-3 bg-white/10 border-2 border-yellow-500/30 rounded-lg text-white text-xl font-bold focus:outline-none focus:border-yellow-400 transition"
+                            className="flex-1 px-4 py-3 bg-white/10 border-2 border-yellow-500/30 rounded-lg text-white text-lg sm:text-xl font-bold focus:outline-none focus:border-yellow-400 transition"
                         />
                     </div>
                     <p className="text-xs text-gray-400 mt-2">
-                        Max available: ${maxBet.toFixed(2)}
+                        Max: ${maxBet.toFixed(2)}
                     </p>
                 </div>
             </div>
 
             {/* Quick Bet Buttons */}
-            <div className="grid grid-cols-2 gap-2 mb-6">
+            <div className="grid grid-cols-2 sm:grid-cols-5 gap-2 mb-4 sm:mb-6">
                 {quickBets.map((bet) => (
                     <button
                         key={bet}
                         onClick={() => setBetAmount(Math.min(bet, maxBet))}
                         disabled={bet > maxBet || spinning}
                         className={`py-2 px-3 rounded-lg font-semibold transition ${bet <= maxBet && !spinning
-                                ? "bg-yellow-600 hover:bg-yellow-700 text-white cursor-pointer transform hover:scale-105 active:scale-95"
-                                : "bg-gray-600 text-gray-400 cursor-not-allowed opacity-50"
+                            ? "bg-yellow-600 hover:bg-yellow-700 text-white cursor-pointer transform hover:scale-105 active:scale-95"
+                            : "bg-gray-600 text-gray-400 cursor-not-allowed opacity-50"
                             }`}
                     >
                         ${bet}
@@ -72,8 +72,8 @@ export default function BettingPanel({
                 onClick={onSpin}
                 disabled={spinning || betAmount > maxBet}
                 className={`w-full py-4 px-4 rounded-lg font-bold text-lg transition transform ${!spinning && betAmount <= maxBet
-                        ? "bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white cursor-pointer hover:scale-105 active:scale-95 shadow-lg"
-                        : "bg-gray-600 text-gray-400 cursor-not-allowed opacity-50"
+                    ? "bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white cursor-pointer hover:scale-105 active:scale-95 shadow-lg"
+                    : "bg-gray-600 text-gray-400 cursor-not-allowed opacity-50"
                     }`}
             >
                 {spinning ? (
@@ -103,7 +103,7 @@ export default function BettingPanel({
             </div>
 
             {/* Tips */}
-            <div className="mt-6 p-3 bg-blue-500/10 border border-blue-500/30 rounded-lg">
+            <div className="mt-5 sm:mt-6 p-3 bg-blue-500/10 border border-blue-500/30 rounded-lg">
                 <p className="text-blue-200 text-xs text-center">
                     💡 Tip: Higher bets could mean bigger payouts!
                 </p>

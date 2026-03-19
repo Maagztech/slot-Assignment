@@ -34,15 +34,15 @@ export default function ReelsDisplay({ grid, spinning }: ReelsDisplayProps) {
         return (
             <div
                 key={index}
-                className={`flex-1 bg-gradient-to-b from-purple-800 to-purple-950 rounded-lg border-4 border-yellow-500 overflow-hidden h-48 flex flex-col items-center justify-center ${isAnimating ? "animate-pulse" : ""
-                    }`}
+                className={`flex-1 bg-gradient-to-b from-purple-800 to-purple-950 rounded-lg border-2 sm:border-4 border-yellow-500 overflow-hidden h-32 sm:h-48 flex flex-col items-center justify-center ${isAnimating ? "animate-pulse" : ""}
+                }`}
             >
                 {isAnimating ? (
-                    <div className="text-4xl animate-bounce">🎲</div>
+                    <div className="text-2xl sm:text-4xl animate-bounce">🎲</div>
                 ) : (
-                    <div className="flex flex-col items-center justify-center gap-2">
+                    <div className="flex flex-col items-center justify-center gap-1 sm:gap-2">
                         {symbols.map((symbol, i) => (
-                            <div key={i} className="text-4xl font-extrabold">
+                            <div key={i} className="text-2xl sm:text-4xl font-extrabold">
                                 {symbol}
                             </div>
                         ))}
@@ -53,10 +53,10 @@ export default function ReelsDisplay({ grid, spinning }: ReelsDisplayProps) {
     };
 
     return (
-        <div className="space-y-6">
+        <div className="space-y-4 sm:space-y-6">
             <div className="text-center">
-                <h2 className="text-3xl font-bold text-white mb-2">🎰 Slot Machine</h2>
-                <p className="text-gray-400">
+                <h2 className="text-2xl sm:text-3xl font-bold text-white mb-1 sm:mb-2">🎰 Slot Machine</h2>
+                <p className="text-gray-400 text-sm sm:text-base">
                     {spinning
                         ? "Spinning... Good luck! 🍀"
                         : displayGrid
@@ -66,15 +66,15 @@ export default function ReelsDisplay({ grid, spinning }: ReelsDisplayProps) {
             </div>
 
             {/* Reels Grid */}
-            <div className="grid grid-cols-5 gap-3">
+            <div className="grid grid-cols-5 gap-2 sm:gap-3">
                 {(displayGrid || Array(5).fill([])).map((reel, idx) => (
                     renderReel(reel || ["🎲"], idx, animatingReels[idx])
                 ))}
             </div>
 
             {/* Instructions */}
-            <div className="bg-blue-500/10 border border-blue-500/30 rounded-lg p-4">
-                <p className="text-blue-200 text-center text-sm">
+            <div className="bg-blue-500/10 border border-blue-500/30 rounded-lg p-3 sm:p-4">
+                <p className="text-blue-200 text-center text-xs sm:text-sm">
                     ✨ Match symbols to win! The more matches, the bigger your prize.
                 </p>
             </div>

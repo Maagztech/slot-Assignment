@@ -56,19 +56,19 @@ export default function WalletManager({
     };
 
     return (
-        <div className="bg-gradient-to-br from-green-900/30 to-emerald-900/30 backdrop-blur-md rounded-2xl p-6 border-2 border-green-500/50 shadow-2xl">
-            <h3 className="text-xl font-bold text-white mb-4 text-center">
-                💳 Add Funds to Wallet
+        <div className="bg-gradient-to-br from-green-900/30 to-emerald-900/30 backdrop-blur-md rounded-2xl p-4 sm:p-6 border-2 border-green-500/50 shadow-2xl">
+            <h3 className="text-lg sm:text-xl font-bold text-white mb-4 text-center">
+                💳 Add Funds
             </h3>
 
             {/* Quick Amount Buttons */}
-            <div className="grid grid-cols-2 gap-2 mb-4">
+            <div className="grid grid-cols-3 sm:grid-cols-2 gap-2 mb-4">
                 {commonAmounts.map((amt) => (
                     <button
                         key={amt}
                         onClick={() => handleAddFunds(amt)}
                         disabled={loading}
-                        className="bg-green-600 hover:bg-green-700 disabled:opacity-50 text-white font-semibold py-2 px-3 rounded-lg transition transform hover:scale-105 active:scale-95"
+                        className="bg-green-600 hover:bg-green-700 disabled:opacity-50 text-white font-semibold py-2 px-2 rounded-lg transition transform hover:scale-105 active:scale-95 text-xs sm:text-sm"
                     >
                         +${amt}
                     </button>
@@ -78,22 +78,22 @@ export default function WalletManager({
             {/* Custom Amount */}
             <form onSubmit={handleCustomAmount} className="space-y-3 mb-4">
                 <div className="flex gap-2">
-                    <div className="flex-1 flex items-center bg-white/10 border border-green-500/30 rounded-lg px-3">
+                    <div className="flex-1 flex items-center bg-white/10 border-2 border-green-500/30 rounded-lg px-3">
                         <span className="text-green-400 font-bold">$</span>
                         <input
                             type="number"
                             value={amount}
                             onChange={(e) => setAmount(e.target.value)}
-                            placeholder="Custom amount"
+                            placeholder="Custom"
                             step="0.01"
                             min="0"
-                            className="flex-1 bg-transparent text-white ml-2 focus:outline-none"
+                            className="flex-1 bg-transparent text-white ml-2 focus:outline-none text-sm sm:text-base"
                         />
                     </div>
                     <button
                         type="submit"
                         disabled={loading || !amount}
-                        className="bg-green-500 hover:bg-green-600 disabled:opacity-50 text-white font-bold px-4 py-2 rounded-lg transition"
+                        className="bg-green-500 hover:bg-green-600 disabled:opacity-50 text-white font-bold px-3 sm:px-4 py-2 rounded-lg transition text-sm sm:text-base"
                     >
                         Add
                     </button>

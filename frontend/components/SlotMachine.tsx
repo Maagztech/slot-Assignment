@@ -86,53 +86,57 @@ export default function SlotMachine() {
     };
 
     return (
-        <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900">
+        <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 pb-8">
             {/* Header */}
             <div className="bg-black/30 backdrop-blur-md border-b border-white/10 sticky top-0 z-50">
-                <div className="max-w-7xl mx-auto px-4 py-4 flex items-center justify-between">
-                    <div className="flex items-center gap-3">
-                        <h1 className="text-3xl font-bold text-white">🎰 SlotMachine</h1>
-                        <span className="hidden md:block text-gray-400 text-sm">
-                            Try your luck!
-                        </span>
+                <div className="max-w-7xl mx-auto px-4 sm:px-6 py-3 sm:py-4 space-y-3 sm:space-y-0">
+                    <div className="flex items-center justify-between gap-2 sm:gap-3">
+                        <div className="flex items-center gap-2 sm:gap-3 flex-1">
+                            <h1 className="text-2xl sm:text-3xl font-bold text-white">🎰</h1>
+                            <div>
+                                <h1 className="text-xl sm:text-2xl font-bold text-white">SlotMachine</h1>
+                                <p className="hidden sm:block text-gray-400 text-xs">Try your luck!</p>
+                            </div>
+                        </div>
+                        <button
+                            onClick={logout}
+                            className="bg-red-600 hover:bg-red-700 text-white font-semibold px-3 py-2 rounded-lg transition text-sm"
+                        >
+                            <span className="hidden sm:inline">Logout</span>
+                            <span className="sm:hidden">🚪</span>
+                        </button>
                     </div>
-                    <div className="flex items-center gap-4">
+                    <div className="flex items-center justify-between gap-2 sm:gap-4">
                         <div className="text-right">
-                            <p className="text-gray-400 text-sm">Balance</p>
-                            <p className="text-2xl font-bold text-green-400">
+                            <p className="text-gray-400 text-xs sm:text-sm">Balance</p>
+                            <p className="text-xl sm:text-2xl font-bold text-green-400">
                                 ${user?.wallet_balance.toFixed(2) || "0.00"}
                             </p>
                         </div>
                         <button
                             onClick={() => setShowWalletManager(!showWalletManager)}
-                            className="bg-green-500 hover:bg-green-600 text-white font-semibold px-4 py-2 rounded-lg transition"
+                            className="bg-green-500 hover:bg-green-600 text-white font-semibold px-3 sm:px-4 py-2 rounded-lg transition text-sm sm:text-base"
                         >
-                            💳 Add Funds
-                        </button>
-                        <button
-                            onClick={logout}
-                            className="bg-red-600 hover:bg-red-700 text-white font-semibold px-4 py-2 rounded-lg transition"
-                        >
-                            Logout
+                            💳 <span className="hidden sm:inline">Add Funds</span>
                         </button>
                     </div>
                 </div>
             </div>
 
             {/* Main Content */}
-            <div className="max-w-7xl mx-auto px-4 py-8">
-                <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 py-6 sm:py-8">
+                <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 sm:gap-8">
                     {/* Left - Main Game Area */}
-                    <div className="lg:col-span-2 space-y-8">
+                    <div className="lg:col-span-2 space-y-4 sm:space-y-6">
                         {/* Reels Display */}
-                        <div className="bg-white/5 backdrop-blur-md rounded-2xl p-8 border border-white/20 shadow-2xl">
+                        <div className="bg-white/5 backdrop-blur-md rounded-2xl p-4 sm:p-8 border border-white/20 shadow-2xl">
                             <ReelsDisplay grid={grid} spinning={spinning} />
                         </div>
 
                         {/* Messages */}
                         {error && (
-                            <div className="bg-red-500/20 border border-red-500/50 rounded-xl p-4">
-                                <p className="text-red-200 font-semibold">⚠️ {error}</p>
+                            <div className="bg-red-500/20 border-2 border-red-500/50 rounded-xl p-4 animate-shake">
+                                <p className="text-red-200 font-semibold text-sm sm:text-base">⚠️ {error}</p>
                             </div>
                         )}
 
@@ -180,7 +184,7 @@ export default function SlotMachine() {
                     </div>
 
                     {/* Right - Betting Panel */}
-                    <div className="space-y-6">
+                    <div className="space-y-4 sm:space-y-6">
                         <BettingPanel
                             betAmount={betAmount}
                             setBetAmount={setBetAmount}

@@ -39,22 +39,22 @@ export default function SignIn() {
     };
 
     return (
-        <div className="min-h-screen bg-gradient-to-br from-blue-950 via-purple-950 to-pink-950 flex items-center justify-center p-4">
+        <div className="min-h-screen bg-gradient-to-br from-blue-950 via-purple-950 to-pink-950 flex items-center justify-center p-4 sm:p-6">
             <div className="w-full max-w-md">
                 {/* Header */}
-                <div className="text-center mb-8">
-                    <h1 className="text-5xl font-bold text-white mb-2">🎰 SlotMachine</h1>
-                    <p className="text-purple-200 text-lg">
+                <div className="text-center mb-8 sm:mb-10">
+                    <h1 className="text-4xl sm:text-5xl font-bold text-white mb-2 drop-shadow-lg">🎰 SlotMachine</h1>
+                    <p className="text-purple-200 text-base sm:text-lg">
                         {isSignUp ? "Create your account" : "Welcome back"}
                     </p>
                 </div>
 
                 {/* Card */}
-                <div className="bg-white/10 backdrop-blur-md rounded-2xl p-8 border border-white/20 shadow-2xl">
-                    <form onSubmit={handleSubmit} className="space-y-6">
+                <div className="bg-white/10 backdrop-blur-md rounded-2xl p-6 sm:p-8 border border-white/20 shadow-2xl">
+                    <form onSubmit={handleSubmit} className="space-y-5 sm:space-y-6">
                         {/* Account Input */}
                         <div>
-                            <label className="block text-white font-semibold mb-2">
+                            <label className="block text-white font-semibold mb-2 text-sm sm:text-base">
                                 {isSignUp ? "Email or Username" : "Account"}
                             </label>
                             <input
@@ -62,13 +62,13 @@ export default function SignIn() {
                                 value={account}
                                 onChange={(e) => setAccount(e.target.value)}
                                 placeholder="Enter your account"
-                                className="w-full px-4 py-3 bg-white/5 border border-white/20 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:border-white/40 focus:bg-white/10 transition"
+                                className="w-full px-4 py-3 bg-white/5 border-2 border-white/20 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:border-blue-400 focus:bg-white/15 transition text-sm sm:text-base"
                             />
                         </div>
 
                         {/* Password Input */}
                         <div>
-                            <label className="block text-white font-semibold mb-2">
+                            <label className="block text-white font-semibold mb-2 text-sm sm:text-base">
                                 Password
                             </label>
                             <input
@@ -76,14 +76,14 @@ export default function SignIn() {
                                 value={password}
                                 onChange={(e) => setPassword(e.target.value)}
                                 placeholder="Enter your password"
-                                className="w-full px-4 py-3 bg-white/5 border border-white/20 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:border-white/40 focus:bg-white/10 transition"
+                                className="w-full px-4 py-3 bg-white/5 border-2 border-white/20 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:border-blue-400 focus:bg-white/15 transition text-sm sm:text-base"
                             />
                         </div>
 
                         {/* Error Message */}
                         {error && (
-                            <div className="bg-red-500/20 border border-red-500/50 rounded-lg p-3">
-                                <p className="text-red-200 text-sm">{error}</p>
+                            <div className="bg-red-500/20 border-2 border-red-500/50 rounded-lg p-4 animate-shake">
+                                <p className="text-red-200 text-sm font-medium">⚠️ {error}</p>
                             </div>
                         )}
 
@@ -91,14 +91,14 @@ export default function SignIn() {
                         <button
                             type="submit"
                             disabled={loading}
-                            className="w-full bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 disabled:opacity-50 disabled:cursor-not-allowed text-white font-bold py-3 px-4 rounded-lg transition transform hover:scale-105 active:scale-95 shadow-lg"
+                            className="w-full bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 disabled:opacity-50 disabled:cursor-not-allowed text-white font-bold py-3 px-4 rounded-lg transition transform hover:scale-105 active:scale-95 shadow-lg text-base sm:text-lg"
                         >
                             {loading ? "Processing..." : isSignUp ? "Sign Up" : "Sign In"}
                         </button>
 
                         {/* Toggle Button */}
                         <div className="text-center pt-4 border-t border-white/20">
-                            <p className="text-gray-300 mb-2">
+                            <p className="text-gray-300 mb-3 text-sm">
                                 {isSignUp ? "Already have an account?" : "Don't have an account?"}
                             </p>
                             <button
@@ -107,7 +107,7 @@ export default function SignIn() {
                                     setIsSignUp(!isSignUp);
                                     setError("");
                                 }}
-                                className="text-blue-300 hover:text-blue-200 font-semibold transition"
+                                className="text-blue-300 hover:text-blue-200 font-semibold transition text-sm sm:text-base"
                             >
                                 {isSignUp ? "Sign In" : "Sign Up"}
                             </button>
@@ -116,7 +116,7 @@ export default function SignIn() {
                 </div>
 
                 {/* Footer */}
-                <div className="text-center mt-8 text-gray-300 text-sm">
+                <div className="text-center mt-6 sm:mt-8 text-gray-300 text-xs sm:text-sm">
                     <p>💡 Use any email and password (6+ chars) to get started</p>
                 </div>
             </div>
