@@ -36,13 +36,6 @@ npm install
 
 ## 4. Configure Environment Variables
 
-Create a `.env` file in the backend directory.
-
-```bash
-cd ../backend
-cp .env.example .env
-```
-
 Example `.env` configuration:
 
 ```env
