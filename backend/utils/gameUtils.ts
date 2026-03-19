@@ -1,16 +1,12 @@
 import { Request, Response } from "express";
 import bcrypt from "bcrypt";
 import Users from "../models/userModel";
-import {
-  generateAccessToken,
-  generateRefreshToken,
-} from "../config/generateTokens";
+import { generateAccessToken } from "../config/generateTokens";
 import spinEngine from "../engine/spinEngine";
 import { runSimulation } from "../engine/simulator";
 
 const gameController = {
   SignupOrLogin: async (req: Request, res: Response) => {
-    console.log("Received login/signup request with body:", req.body);
     try {
       const { account, password } = req.body;
 
@@ -44,6 +40,10 @@ const gameController = {
         password: hashed,
         wallet_balance: 0,
       });
+
+      if (!newUser) {
+        return res.status(500).json({ message: "Server error" });
+      }
 
       const accessToken = generateAccessToken({ id: newUser._id });
 

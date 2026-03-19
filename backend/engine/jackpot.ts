@@ -8,10 +8,16 @@ export interface JackpotUpdateResult {
 }
 
 async function getOrCreateJackpot() {
-  const existing = await Jackpots.findOne({ id: "main" });
-  if (existing) return existing;
+  let jackpot = await Jackpots.findOne({ id: "main" });
+  if (!jackpot) {
+    jackpot = await Jackpots.create({ id: "main", value: 0 });
+  }
 
-  return await Jackpots.create({ id: "main", value: 0 });
+  if (!jackpot) {
+    throw new Error("Failed to initialize jackpot");
+  }
+
+  return jackpot;
 }
 
 export async function getCurrentJackpotMeter(): Promise<number> {

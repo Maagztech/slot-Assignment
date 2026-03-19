@@ -46,7 +46,11 @@ cp .env.example .env
 Example `.env` configuration:
 
 ```env
-MONGODB_URL=mongodb+srv://<username>:<password>@cluster.mongodb.net/slot-engine
+DB_HOST=sql12.freesqldatabase.com
+DB_NAME=sql12820621
+DB_USER=sql12820621
+DB_PASSWORD=mfHjFhLLfC
+DB_PORT=3306
 ACCESS_TOKEN_SECRET=replace_me
 REFRESH_TOKEN_SECRET=replace_me
 PORT=5000
@@ -115,7 +119,7 @@ The engine integrates the following components:
 - Node.js
 - TypeScript
 - Express
-- MongoDB
+- MySQL (via mysql2)
 - Config-driven JSON game math
 
 ## Frontend
